@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="../static/jquery-1.12.4.js"></script>
+    <script>
+
+        $(function () {
+            var names = "孙大爷";
+            var index = 1;
+            var pageSize = 3;
+            var count;
+            onload = function () {
+
+            };
+            $("#first").click(function () {
+                index = 1;
+                x(index);
+            });
+            $("#up").click(function () {
+                index--;
+                if (index < 1)
+                    index = 1;
+                x(index);
+            });
+            $("#down").click(function () {
+                index++;
+                if (index > count)
+                    index = count;
+                x(index);
+            });
+            $("#last").click(function () {
+                index = count;
+                x(index);
+            });
+            $("#tt").blur(function () {
+                var a = $("#tt").val();
+                index = a;
+                if (index < 1) {
+                    index = 1;
+                } else if (index > count) {
+                    index = count;
+                }
+                x(index);
+            });
+            $("#zz").blur(function () {
+                names = $("#zz").val();
+            });
+
+            function x(index) {
+                $.getJSON(
+                    "aaaa",
+                    "index=" + index + "&pageSize=" + pageSize,
+                    function (result) {
+                        count = result.lastPage;
+                        var str;
+                        var d;
+                        var e;
+                        var f;
+                        for (var i = 0; i < result.list.length; i++) {
+                            d = "c?pid="
+                            d += result.list[i].pid;
+
+                            e = "d?pid="
+                            e += result.list[i].pid;
+
+                            f = "u?pid=";
+                            f += result.list[i].pid;
+                            f += "&pname=" + names.toString();
+                            str = str +
+                                "<tr>" +
+                                "<td>" + result.list[i].pid + "</td>" + "&nbsp;" +
+                                "<td>" + result.list[i].pname + "</td>" + "&nbsp;" +
+                                "<td>" + " <a href=" + d + ">删除</a>" + "</td>" + "&nbsp;" +
+                                "<td>" + " <a href=" + e + ">查看</a>" + "</td>" + "&nbsp;" +
+                                "<td>" + " <a href=" + f + ">修改</a>" + "</td>" + "&nbsp;&nbsp;&nbsp;&nbsp;" +
+                                "</tr>"
+                        }
+                        $("#ss").text(index);
+                        $("#ww").text(count);
+                        $("#tab").html(str);
+                    }
+                )
+            }
+        })
+    </script>
+</head>
+<body>
+<thead>
+<th>id</th>
+<th>name</th>
+<th>操作</th>
+</thead>
+<table id="tab"></table>
+<button id="first">首页</button>
+<button id="up">上一页</button>
+<button id="down">下一页</button>
+<button id="last">尾页</button>
+<br>
+修改名字<input type='text' id="zz"><BR>
+当前第 <span id="ss"></span> 页||一共<span id="ww"></span>页
+跳到第<input type="text" id="tt">页
+
+</body>
+</html>
